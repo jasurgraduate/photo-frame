@@ -112,7 +112,6 @@ const Frame = () => {
             <input type="file" accept="image/*" onChange={handleImageUpload} className="upload-input" />
             {preview && (
                 <div className="image-preview">
-                    <img src={preview} alt="Uploaded" className="uploaded-image" />
                     <div className="crop-container">
                         <Cropper
                             image={preview}
@@ -140,11 +139,13 @@ const Frame = () => {
                             className="zoom-slider"
                         />
                     </label>
-                    <button onClick={handleDownload} className="download-button">
-                        Download Photo
-                    </button>
-                    <h2>Final Preview</h2>
+
+                    <h2>✅ Final Preview:</h2>
                     {renderFinalPreview()}
+
+                    <button onClick={handleDownload} className="download-button">
+                        🔽 Download Photo
+                    </button>
                 </div>
             )}
             <canvas ref={canvasRef} style={{ display: 'none' }} />
