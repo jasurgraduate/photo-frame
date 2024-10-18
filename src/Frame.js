@@ -109,7 +109,18 @@ const Frame = () => {
     return (
         <div className="frame-container">
             <h1>Upload Your Image</h1>
-            <input type="file" accept="image/*" onChange={handleImageUpload} className="upload-input" />
+            {/* Hidden file input */}
+            <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="upload-input"
+                id="file-upload"
+            />
+            {/* Custom button */}
+            <label htmlFor="file-upload" className="custom-upload-button">
+                Upload Image
+            </label>
             {preview && (
                 <div className="image-preview">
                     <div className="crop-container">
