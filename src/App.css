@@ -34,7 +34,7 @@ body {
   /* Rounded corners */
   cursor: pointer;
   /* Pointer cursor on hover */
-  transition: background-color 0.3s;
+  transition: background 0.3s ease, transform 0.3s ease-in-out;
   /* Smooth transition */
   display: inline-block;
   /* Make it behave like a button */
@@ -42,9 +42,15 @@ body {
   /* Center the text */
 }
 
+
 .custom-upload-button:hover {
-  background-color: #0056b3;
-  /* Darker shade on hover */
+  background: #0165b7;
+  transform: translateY(-5px);
+}
+
+.custom-upload-button:active {
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
 }
 
 
@@ -170,6 +176,52 @@ body {
 h1 {
   text-align: center;
 }
+
+.example-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.example-image {
+  width: 100%;
+  max-width: 300px;
+  /* Default size for larger screens */
+  height: auto;
+  border: 2px solid #ddd;
+  border-radius: 1px;
+}
+
+/* Notes.css */
+
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.notes-label {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.note-textarea {
+  width: 80%;
+  max-width: 400px;
+  height: 80px;
+  padding: 10px;
+  font-family: 'Brush Script MT', cursive;
+  font-size: 1rem;
+  color: #000;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: none;
+  background-color: #f9f9f9;
+}
+
 
 /* -------------------------------------------------------------------------LAPTOP */
 @media (min-width: 768px) {

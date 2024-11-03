@@ -1,32 +1,32 @@
 // Frame.js
 import React, { useState, useCallback, useRef } from 'react';
 import Cropper from 'react-easy-crop';
-import getCroppedImg from './cropImage'; // Import the cropping function
+import getCroppedImg from './cropImage';
+import Example from './Example';
+import Notes from './Notes'; // Import Notes component
 import './App.css';
 
 const Frame = () => {
-    // eslint-disable-next-line
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null); // State to hold the uploaded image file
     const [preview, setPreview] = useState(null);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedImage, setCroppedImage] = useState(null);
+    const [noteText, setNoteText] = useState('');
     const canvasRef = useRef(null);
 
-    // Handle file input change
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImage(file);
+                setImage(file); // Set the file object to the image state
                 setPreview(reader.result);
             };
             reader.readAsDataURL(file);
         }
     };
 
-    // Handle cropping
     const onCropComplete = useCallback(async (croppedArea, croppedAreaPixels) => {
         try {
             const croppedImg = await getCroppedImg(preview, croppedAreaPixels);
@@ -36,7 +36,6 @@ const Frame = () => {
         }
     }, [preview]);
 
-    // Handle download
     const handleDownload = () => {
         const canvas = canvasRef.current;
         if (canvas && croppedImage) {
@@ -63,6 +62,14 @@ const Frame = () => {
 
                 ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
 
+                // Add note text if provided
+                if (noteText) {
+                    ctx.font = '40px "Brush Script MT", cursive';
+                    ctx.fillStyle = 'black';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(noteText, canvasWidth / 2, canvasHeight - padding);
+                }
+
                 const link = document.createElement('a');
                 link.download = 'camera-print.png';
                 link.href = canvas.toDataURL('image/png', 1.0);
@@ -71,7 +78,6 @@ const Frame = () => {
         }
     };
 
-    // Create a function to render the final preview with the white frame
     const renderFinalPreview = () => {
         if (!croppedImage) return null;
 
@@ -98,18 +104,26 @@ const Frame = () => {
             const imgY = padding;
 
             ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
+
+            // Draw note text if provided
+            if (noteText) {
+                ctx.font = '40px "Brush Script MT", cursive';
+                ctx.fillStyle = 'black';
+                ctx.textAlign = 'center';
+                ctx.fillText(noteText, canvasWidth / 2, canvasHeight - padding);
+            }
+
             document.getElementById('final-preview').src = finalCanvas.toDataURL('image/png', 1.0);
         };
 
-        return (
-            <img id="final-preview" alt="Final Preview" className="final-preview" />
-        );
+        return <img id="final-preview" alt="Final Preview" className="final-preview" />;
     };
 
     return (
         <div className="frame-container">
-            <h1>Upload Your Image</h1>
-            {/* Hidden file input */}
+            {!preview && <Example />}
+            <h1>Upload Your Image ⬇️:</h1>
+
             <input
                 type="file"
                 accept="image/*"
@@ -117,10 +131,13 @@ const Frame = () => {
                 className="upload-input"
                 id="file-upload"
             />
-            {/* Custom button */}
             <label htmlFor="file-upload" className="custom-upload-button">
-                Upload Image
+                🔼 Upload Image 🖼️
             </label>
+
+            {/* Display image file name if it exists */}
+            {image && <p className="file-info">Selected File: {image.name}</p>}
+
             {preview && (
                 <div className="image-preview">
                     <div className="crop-container">
@@ -150,6 +167,8 @@ const Frame = () => {
                             className="zoom-slider"
                         />
                     </label>
+
+                    <Notes noteText={noteText} setNoteText={setNoteText} /> {/* Add Notes Component */}
 
                     <h2>✅ Final Preview:</h2>
                     {renderFinalPreview()}
